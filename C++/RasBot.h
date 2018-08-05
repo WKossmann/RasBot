@@ -5,7 +5,7 @@
 // #define CHECK_CODE_OUTSIDE_RASP 
 
 // Define this if you want to see debug mensages:
-#define PRINT_DEBUG 
+// #define PRINT_DEBUG 
 
 //Default pins
 #define M_LF_PORT 0
