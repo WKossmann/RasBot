@@ -1,6 +1,38 @@
 #include "RasBot.h"
 
-RasBot::RasBot(){}
+#ifndef CHECK_CODE_OUTSIDE_RASP
+#include <wiringPi.h>
+#include <softPwm.h>
+#endif
+
+#ifdef PRINT_DEBUG
+#include <iostream>
+#endif
+
+RasBot::RasBot(){
+    m_LF = M_LF_PORT;
+    m_LB = M_LB_PORT;
+    m_RF = M_RF_PORT;
+    m_RB = M_RB_PORT;
+
+    #ifndef CHECK_CODE_OUTSIDE_RASP
+    if(wiringPiSetup() == -1){
+        #ifdef PRINT_DEBUG
+        std::cout << "Erro config GPIO" << std::endl;
+        #endif
+        exit(1);
+    }
+
+    softPwmCreate(m_LF, 0, 100);
+    softPwmCreate(m_LB, 0, 100);
+    softPwmCreate(m_RF, 0, 100);
+    softPwmCreate(m_RB, 0, 100);
+    #endif
+
+    #ifdef PRINT_DEBUG
+    std::cout << "Config GPIO ... Done" << std::endl;
+    #endif
+}
 RasBot::RasBot(int _mLF_port, int _mLB_port, int _mRF_port, int _mRB_port){
     m_LF = _mLF_port;
     m_LB = _mLB_port;
@@ -14,13 +46,25 @@ RasBot::RasBot(int _mLF_port, int _mLB_port, int _mRF_port, int _mRB_port){
         #endif
         exit(1);
     }
-    pinMode(m_LF, PWM_OUTPUT);
-    pinMode(m_LB, PWM_OUTPUT);
-    pinMode(m_RF, PWM_OUTPUT);
-    pinMode(m_RB, PWM_OUTPUT);
+
+    softPwmCreate(m_LF, 0, 100);
+    softPwmCreate(m_LB, 0, 100);
+    softPwmCreate(m_RF, 0, 100);
+    softPwmCreate(m_RB, 0, 100);
+    #endif
+
+    #ifdef PRINT_DEBUG
+    std::cout << "Config GPIO ... Done" << std::endl;
     #endif
 }
 RasBot::~RasBot(){
+    #ifndef CHECK_CODE_OUTSIDE_RASP
+    softPwmWrite(m_LF,0);
+    softPwmWrite(m_LB,0);
+    softPwmWrite(m_RF,0);
+    softPwmWrite(m_RB,0);
+    delay(10);
+    #endif
 }
 
 bool RasBot::setPorts(int _mLF_port, int _mLB_port, int _mRF_port, int _mRB_port){
@@ -36,10 +80,11 @@ bool RasBot::setPorts(int _mLF_port, int _mLB_port, int _mRF_port, int _mRB_port
         #endif
         return false;
     }
-    pinMode(m_LF, PWM_OUTPUT);
-    pinMode(m_LB, PWM_OUTPUT);
-    pinMode(m_RF, PWM_OUTPUT);
-    pinMode(m_RB, PWM_OUTPUT);
+
+    softPwmCreate(m_LF, 0, 100);
+    softPwmCreate(m_LB, 0, 100);
+    softPwmCreate(m_RF, 0, 100);
+    softPwmCreate(m_RB, 0, 100);
     #endif
 
     #ifdef PRINT_DEBUG
@@ -49,6 +94,15 @@ bool RasBot::setPorts(int _mLF_port, int _mLB_port, int _mRF_port, int _mRB_port
     return true;
 }
 
+void RasBot::stop(){
+    #ifndef CHECK_CODE_OUTSIDE_RASP
+    softPwmWrite(m_LF,0);
+    softPwmWrite(m_LB,0);
+    softPwmWrite(m_RF,0);
+    softPwmWrite(m_RB,0);
+    delay(10);
+    #endif
+}
 void RasBot::moveF(int relative_velocity){
     #ifdef PRINT_DEBUG
     std::cout << "Forward  -> ";
@@ -78,8 +132,8 @@ void RasBot::turnL(int relative_velocity){
     std::cout << "Left     -> ";
     #endif
 
-    motorL(0, relative_velocity/2);
-    motorR(1, relative_velocity/2);
+    motorL(0, relative_velocity);
+    motorR(1, relative_velocity);
     
     #ifdef PRINT_DEBUG
     std::cout << std::endl;
@@ -90,8 +144,8 @@ void RasBot::turnR(int relative_velocity){
     std::cout << "Right    -> ";
     #endif
 
-    motorL(1, relative_velocity/2);
-    motorR(0, relative_velocity/2);
+    motorL(1, relative_velocity);
+    motorR(0, relative_velocity);
     
     #ifdef PRINT_DEBUG
     std::cout << std::endl;
@@ -100,16 +154,16 @@ void RasBot::turnR(int relative_velocity){
 void RasBot::motorL(int direction, int relative_velocity){
     if(direction){
         #ifndef CHECK_CODE_OUTSIDE_RASP
-        digitalWrite(m_LB, LOW);
-        pwmWrite(m_LF,relative_velocity);
+        softPwmWrite(m_LB,0);
+        softPwmWrite(m_LF, relative_velocity);
         #endif
         #ifdef PRINT_DEBUG
         std::cout << " \t L:  " << relative_velocity;
         #endif
     }else{
         #ifndef CHECK_CODE_OUTSIDE_RASP
-        digitalWrite(m_LF, LOW);
-        pwmWrite(m_LB,relative_velocity);
+        softPwmWrite(m_LF,0);
+        softPwmWrite(m_LB, relative_velocity);
         #endif
         #ifdef PRINT_DEBUG
         std::cout << " \t L: -" << relative_velocity;
@@ -119,16 +173,16 @@ void RasBot::motorL(int direction, int relative_velocity){
 void RasBot::motorR(int direction, int relative_velocity){
     if(direction){
         #ifndef CHECK_CODE_OUTSIDE_RASP
-        digitalWrite(m_RB, LOW);
-        pwmWrite(m_RF,relative_velocity);
+        softPwmWrite(m_RB,0);
+        softPwmWrite(m_RF, relative_velocity);
         #endif
         #ifdef PRINT_DEBUG
         std::cout << " \t R:  " << relative_velocity;
         #endif
     }else{
         #ifndef CHECK_CODE_OUTSIDE_RASP
-        digitalWrite(m_RF, LOW);
-        pwmWrite(m_RB,relative_velocity);
+        softPwmWrite(m_RF,0);
+        softPwmWrite(m_RB, relative_velocity);
         #endif
         #ifdef PRINT_DEBUG
         std::cout << " \t R: -" << relative_velocity;

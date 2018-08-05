@@ -1,16 +1,34 @@
-#include "RasBot.h"
+#include <wiringPi.h>
+#include <softPwm.h>
 
 
 int main(){
+    wiringPiSetup();
+    softPwmCreate(0,30,100);
 
-    RasBot robot;
-    robot.setPorts(1,36,33,35);
+    delay(2000);
 
-    robot.moveB(400);
-    robot.turnL(400);
-    robot.moveF(420);
-    robot.turnR(421);
+    softPwmWrite(0, 100);
 
+    delay(2000);
+
+    softPwmWrite(0,0);
+
+    softPwmCreate(1,30,100);
+
+    delay(2000);
+
+    softPwmWrite(1,100);
+    
+    delay(2000);
+
+    softPwmWrite(1,0);
+
+    delay(100);
+
+    // pinMode(27,OUTPUT);
+    // digitalWrite(27, LOW);
+    
     return 0;
 
 }

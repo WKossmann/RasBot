@@ -2,17 +2,16 @@
 #define RASBOT_H
 
 // Coment this line to work on RPi, only difine this if you are coding on another device:
-#define CHECK_CODE_OUTSIDE_RASP 
+// #define CHECK_CODE_OUTSIDE_RASP 
+
 // Define this if you want to see debug mensages:
 #define PRINT_DEBUG 
 
-
-#ifndef CHECK_CODE_OUTSIDE_RASP
-#include <WiringPi.h>
-#endif
-#ifdef PRINT_DEBUG
-#include <iostream>
-#endif
+//Default pins
+#define M_LF_PORT 0
+#define M_LB_PORT 1
+#define M_RF_PORT 2
+#define M_RB_PORT 3
 
 class RasBot{
 public:
@@ -21,6 +20,7 @@ public:
     ~RasBot();
 
     bool setPorts(int _mLF_port, int _mLB_port, int _mRF_port, int _mRB_port);
+    void stop();
 
     void moveF(int relative_velocity); 
     void moveB(int relative_velocity);
