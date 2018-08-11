@@ -15,7 +15,6 @@
 
 class RasBot{
 public:
-    RasBot();
     RasBot(int _mLF_port, int _mLB_port, int _mRF_port, int _mRB_port);
     ~RasBot();
 
