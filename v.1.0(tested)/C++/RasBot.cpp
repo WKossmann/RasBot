@@ -5,9 +5,29 @@
 #include <softPwm.h>
 #endif
 
-#ifdef PRINT_DEBUG
-#include <iostream>
-#endif
+RasBot::RasBot(){
+    m_LF = M_LF_PORT;
+    m_LB = M_LB_PORT;
+    m_RF = M_RF_PORT;
+    m_RB = M_RB_PORT;
+
+    #ifndef CHECK_CODE_OUTSIDE_RASP
+    if(wiringPiSetup() == -1){
+        #ifdef PRINT_DEBUG
+        std::cout << "Erro config GPIO" << std::endl;
+        #endif
+        exit(1);
+    }
+    softPwmCreate(m_LF, 0, 100);
+    softPwmCreate(m_LB, 0, 100);
+    softPwmCreate(m_RF, 0, 100);
+    softPwmCreate(m_RB, 0, 100);
+    #endif
+
+    #ifdef PRINT_DEBUG
+    std::cout << "Config GPIO ... Done" << std::endl;
+    #endif
+}
 
 RasBot::RasBot(int _mLF_port = M_LF_PORT, int _mLB_port = M_LB_PORT, int _mRF_port = M_RF_PORT, int _mRB_port = M_RB_PORT){
     m_LF = _mLF_port;
@@ -22,7 +42,6 @@ RasBot::RasBot(int _mLF_port = M_LF_PORT, int _mLB_port = M_LB_PORT, int _mRF_po
         #endif
         exit(1);
     }
-
     softPwmCreate(m_LF, 0, 100);
     softPwmCreate(m_LB, 0, 100);
     softPwmCreate(m_RF, 0, 100);
@@ -35,6 +54,10 @@ RasBot::RasBot(int _mLF_port = M_LF_PORT, int _mLB_port = M_LB_PORT, int _mRF_po
 }
 RasBot::~RasBot(){
     stop();
+	pinMode(m_LF, INPUT);
+	pinMode(m_LB, INPUT);
+	pinMode(m_RF, INPUT);
+	pinMode(m_RB, INPUT);
 }
 bool RasBot::setPorts(int _mLF_port, int _mLB_port, int _mRF_port, int _mRB_port){
     m_LF = _mLF_port;

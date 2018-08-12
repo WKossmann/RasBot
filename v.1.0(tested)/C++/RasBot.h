@@ -1,11 +1,13 @@
 #ifndef RASBOT_H
 #define RASBOT_H
 
+#include <iostream>
+
 // Coment this line to work on RPi, only difine this if you are coding on another device:
 // #define CHECK_CODE_OUTSIDE_RASP 
 
-// Define this if you want to see debug mensages:
-// #define PRINT_DEBUG 
+// Coment this line with don't want debug mensages:
+#define PRINT_DEBUG 
 
 //Default pins
 #define M_LF_PORT 0
@@ -15,6 +17,7 @@
 
 class RasBot{
 public:
+	RasBot();
     RasBot(int _mLF_port, int _mLB_port, int _mRF_port, int _mRB_port);
     ~RasBot();
 
