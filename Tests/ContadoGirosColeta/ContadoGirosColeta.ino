@@ -3,43 +3,50 @@
 #include "RasBotArduino.h"
 
 RasBotArduino robot(6,5,10,9);
-
 ContaGiros cg; 
 
 
+
+unsigned long tempoAux = 0;
+int pwm = 75;
+double vel;
+bool stop_ = true;
+
 void setup() {
   Serial.begin(9600);
-  cg.setup(A0,300);
-  robot.moveF(100);
-}
-
-void testeContaGiros(){
-  if ( cg.contaAte(20)) {
-//    motorDC.setSpeedA(1,100);
-      analogWrite(6,100);
-  }
-  else {
-//    motorDC.stopMotorA();
-    analogWrite(6,100);
-  }
   
-}
-
-void testePicosPorTempo(){
-//  motorDC.setSpeedA(1,110);
-  unsigned long picos =  cg.girosPorTempo(10000); 
-  Serial.println(picos); 
-}
-
-void testeVelocidadeAtual(){
-  
-  // tempo configurado para 1 segundo (1000 ms)
-  double vel = cg.getVelocidade(500); 
-  Serial.println(vel); 
 }
 
 void loop() {
-  testeVelocidadeAtual();
-  // Serial.println(analogRead(A0));
-  // delay(100);  
+  if(Serial.available()){
+    char rd = Serial.read();
+    if(rd == '1'){
+      stop_ = false;
+      cg.setup(A1,300);
+      robot.moveF(pwm);
+    }
+  }
+
+  //Teste pwmxvel:
+  if(!stop_){
+    vel = cg.getVelocidade(700);  
+  }
+  if(!stop_ && millis()-tempoAux > 800){
+    tempoAux = millis();
+    Serial.print(pwm);
+    Serial.print(", ");
+    Serial.println(vel);
+    pwm +=  10;
+    if(pwm >= 255){
+      pwm = 80;
+      robot.moveF(pwm);
+    }else{
+      robot.moveF(pwm);
+    }
+  }
+
+//   Teste limiar sensor:
+//   robot.moveF(150);
+//   Serial.println(analogRead(A1));
+//   delay(100);
 }

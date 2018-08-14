@@ -31,7 +31,6 @@ void ContaGiros::atualiza(){
     contadorPicos++; 
   }
   pulsoAnterior = pulsoAtual; 
-   
 }
 
 /*
@@ -50,7 +49,7 @@ unsigned long  ContaGiros::girosPorTempo(unsigned long d) {
     deltaContadorPicos = contadorPicos - ultimoContadorPicos; 
     ultimoTempo = tempoAtual; 
     ultimoContadorPicos = contadorPicos;
-    Serial.println(deltaContadorPicos); 
+//    Serial.println(deltaContadorPicos); 
   }
   return deltaContadorPicos; 
   
