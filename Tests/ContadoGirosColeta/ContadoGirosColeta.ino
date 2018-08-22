@@ -2,10 +2,8 @@
 #include "ContaGiros.h"
 #include "RasBotArduino.h"
 
-RasBotArduino robot(6,5,10,9);
+RasBotArduino robot(6,5,9,10);
 ContaGiros cg; 
-
-
 
 unsigned long tempoAux = 0;
 int pwm = 75;
@@ -14,7 +12,6 @@ bool stop_ = true;
 
 void setup() {
   Serial.begin(9600);
-  
 }
 
 void loop() {
@@ -29,7 +26,7 @@ void loop() {
 
   //Teste pwmxvel:
   if(!stop_){
-    vel = cg.getVelocidade(700);  
+    vel = cg.getVelocidade(500);  
   }
   if(!stop_ && millis()-tempoAux > 800){
     tempoAux = millis();
