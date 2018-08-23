@@ -6,7 +6,7 @@ ContaGiros cgD, cgE;
 
 unsigned long tempoAux = 0;
 
-float pwm_inicial = 0;
+float pwm_inicial = 100;
 unsigned long dt = 300;
 
 float pwmE;
@@ -33,36 +33,38 @@ void loop() {
   cgE.getVelocidade(300);
   cgD.getVelocidade(300);
 
-  if(millis()-tempoAux > dt){
-    tempoAux = millis();
+  // if(millis()-tempoAux > dt){
+  //   tempoAux = millis();
 
-    pvD = cgD.getVelocidade(300);
-    eD = spD-pvD;
-    pwmD = pwmD + eD*KpD;
-    if(pwmD>=255){
-      pwmD=255;
-    }
+  //   pvD = cgD.getVelocidade(300);
+  //   eD = spD-pvD;
+  //   pwmD = pwmD + eD*KpD;
+  //   if(pwmD>=255){
+  //     pwmD=255;
+  //   }
 
-    pvE = cgE.getVelocidade(300);
-    eE = spE-pvE;
-    pwmE = pwmE + eE*KpE;
-    if(pwmE>=255){
-      pwmE=255;
-    }
+  //   pvE = cgE.getVelocidade(300);
+  //   eE = spE-pvE;
+  //   pwmE = pwmE + eE*KpE;
+  //   if(pwmE>=255){
+  //     pwmE=255;
+  //   }
 
-    robot.moveI(pwmE,pwmD);
-    Serial.print(pvE);
-    Serial.print(',');
-    Serial.print(pwmE);
-    Serial.print(',');
-    Serial.print(spE);
-    Serial.print(',');
-    Serial.print(pvD);
-    Serial.print(',');
-    Serial.print(pwmD);
-    Serial.print(',');
-    Serial.println(spD);
-  }
+  //   robot.moveI(pwmE,pwmD);
+  //   Serial.print(pvE);
+  //   Serial.print(',');
+  //   Serial.print(pwmE);
+  //   Serial.print(',');
+  //   Serial.print(spE);
+  //   Serial.print(',');
+  //   Serial.print(pvD);
+  //   Serial.print(',');
+  //   Serial.print(pwmD);
+  //   Serial.print(',');
+  //   Serial.println(spD);
+  // }
+
+  Serial.println(cgD.getVelocidade(100));
 
   // Teste limiar sensor:
   // robot.moveF(150);
