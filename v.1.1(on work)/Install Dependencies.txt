@@ -1,0 +1,15 @@
+Testado apenas com distribuição Raspibian Stretch:
+
+** Config rasp:
+- Habilitar I2C
+-- Config rasp.
+-- (Opcional: Install sudo apt-get install -y i2c-tools)
+
+- Habilitar GPIOs
+-- Config rasp.
+
+** Install:
+
+- Lib para conversor analogico - digital 
+-- Link: https://github.com/adafruit/Adafruit_Python_ADS1x15
+
